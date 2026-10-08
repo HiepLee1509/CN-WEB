@@ -64,8 +64,6 @@
             flex-direction: column;
             justify-content: space-between;
             border-top: 4px solid var(--accent-color);
-            text-decoration: none;
-            color: inherit;
         }
 
         .assignment-card:hover {
@@ -112,25 +110,38 @@
             flex-grow: 1;
         }
 
-        .btn-view {
-            display: inline-block;
-            text-align: center;
-            background-color: var(--accent-color);
-            color: white;
-            padding: 10px 18px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: background-color 0.2s;
+        .dropdown-container {
+            margin-top: 15px;
         }
 
-        .assignment-card:hover .btn-view {
-            background-color: #2980b9;
+        .dropdown-container label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        .select-link {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccd0d5;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+            font-size: 0.9rem;
+            color: #333;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .select-link:hover, .select-link:focus {
+            border-color: var(--accent-color);
+            background-color: #ffffff;
         }
 
         .disabled {
             opacity: 0.7;
-            cursor: not-allowed;
         }
 
         footer {
@@ -151,7 +162,7 @@
 
         <div class="assignment-grid">
             <!-- Assignment 1 -->
-            <a href="http://lenghiahiep20235326.io.vn" class="assignment-card">
+            <div class="assignment-card">
                 <div>
                     <div class="card-header">
                         <span class="badge completed">Assignment 1</span>
@@ -159,11 +170,18 @@
                     <h3>Đăng Ký Domain & Web Hosting</h3>
                     <p>Đăng ký tên miền miễn phí (lenghiahiep20235326.io.vn), tạo GitHub Repository và cấu hình Web Hosting với GitHub Pages.</p>
                 </div>
-                <span class="btn-view">Đã hoàn thành ✅</span>
-            </a>
+                <div class="dropdown-container">
+                    <label for="assign1-select">Chọn trang kết quả:</label>
+                    <select id="assign1-select" class="select-link" onchange="if(this.value) window.location.href=this.value;">
+                        <option value="">-- Chọn bài làm --</option>
+                        <option value="http://lenghiahiep20235326.io.vn">Link Domain / Trang chủ</option>
+                        <option value="https://github.com/HiepLee1509/CN-WEB">Link Repository GitHub</option>
+                    </select>
+                </div>
+            </div>
 
             <!-- Assignment 2 -->
-            <a href="assignment2/index.html" class="assignment-card">
+            <div class="assignment-card">
                 <div>
                     <div class="card-header">
                         <span class="badge">Assignment 2</span>
@@ -171,8 +189,17 @@
                     <h3>Bài Tập HTML5 & Form</h3>
                     <p>Xây dựng Form đăng ký thông tin, trang truyền thông Media đa phương tiện và refactor Semantic HTML5 cải thiện SEO.</p>
                 </div>
-                <span class="btn-view">Xem bài làm &rarr;</span>
-            </a>
+                <div class="dropdown-container">
+                    <label for="assign2-select">Chọn trang kết quả:</label>
+                    <select id="assign2-select" class="select-link" onchange="if(this.value) window.location.href=this.value;">
+                        <option value="">-- Chọn bài làm --</option>
+                        <option value="assignment2/index.html">Trang chủ mẫu (index.html)</option>
+                        <option value="assignment2/register.html">Link to register.html</option>
+                        <option value="assignment2/media.html">Link to media.html</option>
+                        <option value="assignment2/index_new.html">Link to index_new.html</option>
+                    </select>
+                </div>
+            </div>
 
             <!-- Assignment 3 -->
             <div class="assignment-card disabled">
@@ -183,7 +210,12 @@
                     <h3>Assignment 3</h3>
                     <p>Nội dung bài tập tuần 3 sẽ được cập nhật tại đây.</p>
                 </div>
-                <span class="btn-view" style="background-color: #ccc;">Chưa mở</span>
+                <div class="dropdown-container">
+                    <label>Chọn trang kết quả:</label>
+                    <select class="select-link" disabled>
+                        <option value="">-- Chưa có bài làm --</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Assignment 4 -->
@@ -195,7 +227,12 @@
                     <h3>Assignment 4</h3>
                     <p>Nội dung bài tập tuần 4 sẽ được cập nhật tại đây.</p>
                 </div>
-                <span class="btn-view" style="background-color: #ccc;">Chưa mở</span>
+                <div class="dropdown-container">
+                    <label>Chọn trang kết quả:</label>
+                    <select class="select-link" disabled>
+                        <option value="">-- Chưa có bài làm --</option>
+                    </select>
+                </div>
             </div>
         </div>
 
