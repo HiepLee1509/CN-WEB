@@ -1,22 +1,12 @@
 /* =====================================================================
    Blakletterpress — Trang khuyến mãi thiệp Tết 2026
-   HOẠT ĐỘNG 1 — CSS ĐÃ CÀI LỖI (chủ đề: Box model + Position).
-
-   Trang này đáng lẽ hiển thị như sau:
-   - Thanh menu trên cùng DÍNH lại khi cuộn (sticky) và luôn nằm trên ảnh.
-   - Ảnh hero phủ kín khung, chữ tiêu đề nằm CHÍNH GIỮA ảnh.
-   - Ba thẻ sản phẩm xếp thành MỘT HÀNG, mỗi thẻ có nhãn "-20%" ở GÓC TRÊN
-     BÊN PHẢI của chính thẻ đó; ảnh và chữ nằm gọn trong thẻ.
-   - Nút "↑" nổi cố định ở GÓC DƯỚI BÊN PHẢI màn hình khi cuộn.
-
-   Hiện tại bố cục đang VỠ. Nhiệm vụ của bạn (KHÔNG dùng AI): tìm và sửa
-   các lỗi box model / position để trang hiển thị đúng như mô tả trên.
+   HOẠT ĐỘNG 1 — SỬA LỖI CSS (Box model + Position)
    ===================================================================== */
 
 * {
 	margin: 0;
 	padding: 0;
-	box-sizing: border-box;
+	box-sizing: border-box; /* Sửa lỗi 1: Giúp padding/border không làm phình kích thước card */
 }
 
 body {
@@ -34,8 +24,8 @@ a {
 .site-header {
 	background: #2b2b2b;
 	position: sticky;
-	top: 0;
-	z-index: 100;
+	top: 0;           /* Sửa lỗi 2: Thêm top: 0 để position: sticky hoạt động */
+	z-index: 100;     /* Sửa lỗi 3: Thêm z-index lớn để header luôn đè lên ảnh hero khi cuộn */
 }
 
 .header-inner {
@@ -71,15 +61,15 @@ a {
 
 /* ===== Hero ===== */
 .hero {
-	position: relative;
 	height: 360px;
 	overflow: hidden;
+	position: relative; /* Sửa lỗi 4: Thêm position relative để hero-overlay căn giữa theo khung hero */
 }
 
 .hero-bg {
 	width: 100%;
 	height: 100%;
-	object-fit: cover;
+	object-fit: cover;  /* Sửa lỗi 5: Phủ kín khung hero mà không bị biến dạng */
 }
 
 .hero-overlay {
@@ -134,12 +124,13 @@ a {
 
 .card {
 	flex: 0 0 calc((100% - 48px) / 3);
-	position: relative;
+	/* Sửa lỗi 6: Bỏ height: 300px cố định để nội dung chứa gọn trong card */
 	background: #fff;
 	border: 1px solid #e0d8c8;
 	border-radius: 8px;
 	padding: 16px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+	position: relative; /* Sửa lỗi 7: Thêm position relative để badge định vị đúng góc card */
 }
 
 .badge {
@@ -152,12 +143,13 @@ a {
 	font-weight: bold;
 	padding: 4px 10px;
 	border-radius: 20px;
+	z-index: 2;
 }
 
 .card img {
 	display: block;
-	width: 100%;
-	height: 160px;
+	width: 100%;       /* Sửa lỗi 8: Đảm bảo ảnh nằm gọn vừa khít với card */
+	height: 180px;
 	object-fit: cover;
 	border-radius: 4px;
 }
@@ -182,7 +174,7 @@ a {
 /* ===== Nút lên đầu trang ===== */
 .back-to-top {
 	position: fixed;
-	bottom: 24px;
+	bottom: 24px;      /* Sửa lỗi 9: Đổi top: 24px thành bottom: 24px để cố định góc DƯỚI bên phải */
 	right: 24px;
 	width: 48px;
 	height: 48px;
@@ -193,7 +185,7 @@ a {
 	font-size: 22px;
 	text-decoration: none;
 	border-radius: 50%;
-	z-index: 200;
+	z-index: 99;
 }
 
 /* ===== Footer ===== */

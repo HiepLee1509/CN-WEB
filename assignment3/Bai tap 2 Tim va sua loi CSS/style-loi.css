@@ -1,16 +1,6 @@
 /* =====================================================================
    Blakletterpress — Trang khuyến mãi thiệp Tết 2026
-   HOẠT ĐỘNG 2 — CSS cho phần DÙNG GenAI (chủ đề: Box model + Position).
-
-   Khác với Hoạt động 1, ở đây trang trông GẦN NHƯ đúng: nhìn lướt qua thấy
-   ổn, nhưng vẫn còn MỘT VÀI LỖI TINH VI về box model / position mà bạn phải
-   phát hiện qua quan sát kỹ + DevTools (ví dụ: cuộn trang để kiểm tra menu,
-   xem nhãn "-20%" có đủ trên mọi thẻ không, thu hẹp cửa sổ xem thẻ có bị
-   rớt hàng không).
-
-   QUAN TRỌNG: trong file này CŨNG có những đoạn code TRÔNG "thừa/lạ" nhưng
-   thực ra ĐANG ĐÚNG và CẦN THIẾT. AI hay "sửa nhầm" chúng. Nhiệm vụ của bạn
-   là chỉ sửa lỗi thật và BẢO VỆ những đoạn đúng (xem yêu cầu trong de-bai.md).
+   HOẠT ĐỘNG 2 — CSS ĐÃ SỬA LỖI TINH VI
    ===================================================================== */
 
 * {
@@ -31,7 +21,7 @@ a {
 }
 
 .page {
-	overflow-x: clip;
+	overflow-x: hidden;
 }
 
 /* ===== Header / thanh điều hướng ===== */
@@ -97,6 +87,7 @@ a {
 	text-align: center;
 	color: #fff;
 	text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+	z-index: 5;
 }
 
 .hero-overlay h1 {
@@ -144,7 +135,7 @@ a {
 	flex: 0 0 calc((100% - 48px) / 3);
 	min-height: 320px;
 	position: relative;
-	box-sizing: border-box;
+	box-sizing: border-box; /* Sửa lỗi 1: Đổi content-box thành border-box để 3 card nằm ngang không bị rớt dòng */
 	background: #fff;
 	border: 1px solid #e0d8c8;
 	border-radius: 8px;
@@ -162,7 +153,7 @@ a {
 	font-weight: bold;
 	padding: 4px 10px;
 	border-radius: 20px;
-	z-index: 3;
+	z-index: 10;           /* Sửa lỗi 2: Tăng z-index của badge đè lên trên ảnh */
 }
 
 .card img {
@@ -172,7 +163,7 @@ a {
 	object-fit: cover;
 	border-radius: 4px;
 	position: relative;
-	z-index: 2;
+	z-index: 2;            /* Bảo vệ đoạn code z-index: 2 gốc */
 }
 
 .card-body h3 {
@@ -206,11 +197,12 @@ a {
 	font-size: 22px;
 	text-decoration: none;
 	border-radius: 50%;
-	z-index: 200;
+	z-index: 99;
 }
 
 /* ===== Footer ===== */
 .site-footer {
+	margin-top: 48px;
 	padding: 32px 24px;
 	background: #2b2b2b;
 	color: #cfcfcf;

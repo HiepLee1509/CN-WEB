@@ -184,7 +184,7 @@
             <div class="assignment-card">
                 <div>
                     <div class="card-header">
-                        <span class="badge">Assignment 2</span>
+                        <span class="badge completed">Assignment 2</span>
                     </div>
                     <h3>Bài Tập HTML5 & Form</h3>
                     <p>Xây dựng Form đăng ký thông tin, trang truyền thông Media đa phương tiện và refactor Semantic HTML5 cải thiện SEO.</p>
@@ -202,18 +202,22 @@
             </div>
 
             <!-- Assignment 3 -->
-            <div class="assignment-card disabled">
+            <div class="assignment-card">
                 <div>
                     <div class="card-header">
-                        <span class="badge pending">Sắp ra mắt</span>
+                        <span class="badge completed">Assignment 3</span>
                     </div>
-                    <h3>Assignment 3</h3>
-                    <p>Nội dung bài tập tuần 3 sẽ được cập nhật tại đây.</p>
+                    <h3>CSS Layout & Responsive</h3>
+                    <p>Sửa lỗi CSS Box Model/Position, tối ưu bài tập Responsive Media Queries và xây dựng Layout CSS hoàn chỉnh.</p>
                 </div>
                 <div class="dropdown-container">
-                    <label>Chọn trang kết quả:</label>
-                    <select class="select-link" disabled>
-                        <option value="">-- Chưa có bài làm --</option>
+                    <label for="assign3-select">Chọn trang kết quả:</label>
+                    <select id="assign3-select" class="select-link" onchange="if(this.value) window.location.href=this.value;">
+                        <option value="">-- Chọn bài làm --</option>
+                        <option value="assignment3/Bai tap 1 Tim va sua loi CSS/trang.html">Bài 1: Sửa lỗi CSS thủ công</option>
+                        <option value="assignment3/Bai tap 2 Tim va sua loi CSS/trang.html">Bài 2: Chẩn đoán & Sửa lỗi CSS</option>
+                        <option value="assignment3/responsive-Bai tap 3.html">Bài 3: Demo Responsive Web Design</option>
+                        <option value="assignment3/Bai tap 4 Xay dung CSS/trang-goc.html">Bài 4: Xây dựng CSS Responsive</option>
                     </select>
                 </div>
             </div>
