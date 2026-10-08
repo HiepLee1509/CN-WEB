@@ -3,66 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài Tập Về Nhà - Công Nghệ Web</title>
+    <title>Danh Sách Bài Tập Về Nhà - CN Web</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 40px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 80vh;
-        }
-        .card {
-            background: #ffffff;
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            max-width: 500px;
-            width: 100%;
-        }
-        h1 {
-            color: #2c3e50;
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-        ul {
-            list-style: none;
             padding: 0;
         }
-        li {
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-            font-size: 16px;
-            color: #555;
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 40px 20px;
         }
-        li:last-child {
-            border-bottom: none;
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
         }
-        .label {
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .assignment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .assignment-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-top: 4px solid var(--accent-color);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .assignment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .badge {
+            background-color: #e8f4fc;
+            color: var(--accent-color);
             font-weight: bold;
-            color: #34495e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
         }
-        .status {
-            color: #27ae60;
-            font-weight: bold;
+
+        .badge.pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .assignment-card h3 {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .assignment-card p {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .btn-view {
+            display: inline-block;
+            text-align: center;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+
+        .assignment-card:hover .btn-view {
+            background-color: #2980b9;
+        }
+
+        .disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #888;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>Báo Cáo BTVN - Công Nghệ Web</h1>
-        <ul>
-            <li><span class="label">Tên miền:</span> <a href="http://lenghiahiep20235326.io.vn" target="_blank">lenghiahiep20235326.io.vn</a></li>
-            <li><span class="label">Hosting:</span> GitHub Pages</li>
-            <li><span class="label">Repository:</span> <a href="https://github.com/HiepLee1509/CN-WEB" target="_blank">HiepLee1509/CN-WEB</a></li>
-            <li><span class="label">Trạng thái:</span> <span class="status">Đã hoàn thành ✅</span></li>
-        </ul>
+    <div class="container">
+        <header>
+            <h1>Danh Sách Bài Tập Về Nhà (BTVN)</h1>
+            <p>Họ & Tên: Lê Nghĩa Hiệp - Mã SV: 20235326</p>
+            <p>Tên miền: <a href="http://lenghiahiep20235326.io.vn" style="color: var(--accent-color);">lenghiahiep20235326.io.vn</a></p>
+        </header>
+
+        <div class="assignment-grid">
+            <!-- Assignment 1 -->
+            <a href="assignment1/index.html" class="assignment-card">
+                <div>
+                    <div class="card-header">
+                        <span class="badge">Assignment 1</span>
+                    </div>
+                    <h3>Bài Tập HTML5 & Form</h3>
+                    <p>Bao gồm Form đăng ký thông tin, trang Semantic HTML5 và trang truyền thông Media HTML5.</p>
+                </div>
+                <span class="btn-view">Xem bài làm &rarr;</span>
+            </a>
+
+            <!-- Assignment 2 -->
+            <div class="assignment-card disabled">
+                <div>
+                    <div class="card-header">
+                        <span class="badge pending">Sắp ra mắt</span>
+                    </div>
+                    <h3>Assignment 2</h3>
+                    <p>Nội dung bài tập tuần 2 sẽ được cập nhật tại đây.</p>
+                </div>
+                <span class="btn-view" style="background-color: #ccc;">Chưa mở</span>
+            </div>
+
+            <!-- Assignment 3 -->
+            <div class="assignment-card disabled">
+                <div>
+                    <div class="card-header">
+                        <span class="badge pending">Sắp ra mắt</span>
+                    </div>
+                    <h3>Assignment 3</h3>
+                    <p>Nội dung bài tập tuần 3 sẽ được cập nhật tại đây.</p>
+                </div>
+                <span class="btn-view" style="background-color: #ccc;">Chưa mở</span>
+            </div>
+
+            <!-- Assignment 4 -->
+            <div class="assignment-card disabled">
+                <div>
+                    <div class="card-header">
+                        <span class="badge pending">Sắp ra mắt</span>
+                    </div>
+                    <h3>Assignment 4</h3>
+                    <p>Nội dung bài tập tuần 4 sẽ được cập nhật tại đây.</p>
+                </div>
+                <span class="btn-view" style="background-color: #ccc;">Chưa mở</span>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2026 Lê Nghĩa Hiệp. All rights reserved.</p>
+        </footer>
     </div>
 </body>
 </html>
