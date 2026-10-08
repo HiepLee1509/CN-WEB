@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lê Nghĩa Hiệp - BTVN Công Nghệ Web (Cat Paradise)</title>
+    <title>Lê Nghĩa Hiệp - BTVN Công Nghệ Web (Interactive Cat World)</title>
     <!-- Google Fonts & Font Awesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,11 +12,11 @@
     
     <style>
         :root {
-            --bg-yellow: #fff9db; /* Pastel Yellow Background */
+            --bg-yellow: #fff9db;
             --primary: #ff6b81;
             --secondary: #48dbfb;
             --accent: #feca57;
-            --card-bg: rgba(255, 255, 255, 0.92);
+            --card-bg: rgba(255, 255, 255, 0.94);
             --text-main: #2d3436;
             --text-muted: #636e72;
             --shadow-card: 0 12px 35px rgba(254, 202, 87, 0.25);
@@ -35,112 +35,49 @@
             background-image: 
                 radial-gradient(#f7d794 1.5px, transparent 1.5px), 
                 radial-gradient(#f7d794 1.5px, #fff9db 1.5px);
-            background-size: 60px 60px;
-            background-position: 0 0, 30px 30px;
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px;
             color: var(--text-main);
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 40px 20px 80px;
             position: relative;
             overflow-x: hidden;
+            user-select: none;
         }
 
-        /* ==================== ANIMATED CATS IN BACKGROUND ==================== */
-        .bg-cat-layer {
-            position: absolute;
+        /* Canvas cho hiệu ứng mèo tương tác */
+        #catCanvas {
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        /* 1. Mèo chạy ngang qua màn hình (Running Cat) */
-        .running-cat {
-            position: absolute;
-            top: 18%;
-            font-size: 2.8rem;
-            animation: catRun 14s linear infinite;
-        }
-
-        @keyframes catRun {
-            0% { left: -100px; transform: scaleX(1); }
-            49.9% { left: 105vw; transform: scaleX(1); }
-            50% { left: 105vw; transform: scaleX(-1); }
-            100% { left: -100px; transform: scaleX(-1); }
-        }
-
-        /* 2. Mèo ngủ trên đệm mây góc trái (Sleeping Cat) */
-        .sleeping-cat-wrapper {
-            position: absolute;
-            top: 45%;
-            left: 3%;
-            text-align: center;
-            animation: floatSlow 6s ease-in-out infinite;
-        }
-
-        .sleeping-cat {
-            font-size: 3.5rem;
-            display: inline-block;
-        }
-
-        .zzz-text {
-            font-weight: 800;
-            color: #f5cd79;
-            font-size: 1.2rem;
-            position: absolute;
-            top: -15px;
-            right: 0;
-            animation: zzzAnim 3s infinite;
-        }
-
-        @keyframes zzzAnim {
-            0% { opacity: 0; transform: translate(0, 0) scale(0.8); }
-            50% { opacity: 1; transform: translate(15px, -15px) scale(1.2); }
-            100% { opacity: 0; transform: translate(25px, -30px) scale(1.5); }
-        }
-
-        /* 3. Mèo vờn cuộn len ở góc phải (Playful Cat) */
-        .playful-cat-wrapper {
-            position: absolute;
-            top: 65%;
-            right: 4%;
-            animation: floatSlow 5s ease-in-out infinite 1s;
-        }
-
-        .playful-cat {
-            font-size: 3.2rem;
-            display: inline-block;
-            animation: catPlay 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes catPlay {
-            0% { transform: rotate(-10deg) scale(1); }
-            100% { transform: rotate(15deg) scale(1.1); }
-        }
-
-        /* 4. Mèo leo núi ngoi lên ở dưới đáy (Peeking Cat) */
-        .peeking-cat {
-            position: fixed;
-            bottom: -10px;
-            right: 15%;
-            font-size: 4rem;
             z-index: 10;
-            animation: catPeek 8s ease-in-out infinite;
         }
 
-        @keyframes catPeek {
-            0%, 100% { transform: translateY(50px); }
-            30%, 70% { transform: translateY(-10px); }
+        /* Banner hướng dẫn tương tác */
+        .hint-bar {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            color: #d35400;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(250, 177, 160, 0.35);
+            margin-top: 10px;
+            animation: pulseHint 2s infinite ease-in-out;
         }
 
-        @keyframes floatSlow {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+        @keyframes pulseHint {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
         }
 
-        /* ==================== MAIN CONTAINER ==================== */
+        /* Container nội dung */
         .container {
             max-width: 1050px;
             margin: 0 auto;
@@ -151,27 +88,27 @@
         /* Header */
         header {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 45px;
         }
 
         .header-avatar {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             background: #ffeaa7;
             border: 4px solid #fff;
             border-radius: 50%;
-            margin: 0 auto 15px;
+            margin: 0 auto 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
+            font-size: 3.5rem;
             box-shadow: 0 10px 30px rgba(254, 202, 87, 0.5);
             animation: bounceAvatar 3s infinite ease-in-out;
         }
 
         @keyframes bounceAvatar {
             0%, 100% { transform: translateY(0) rotate(0); }
-            50% { transform: translateY(-12px) rotate(5deg); }
+            50% { transform: translateY(-10px) rotate(4deg); }
         }
 
         header h1 {
@@ -184,16 +121,19 @@
 
         .student-info {
             display: inline-flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 15px;
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(10px);
-            padding: 12px 28px;
+            padding: 10px 24px;
             border-radius: 30px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 700;
             color: #576574;
             border: 2px solid #ffeaa7;
+            margin-bottom: 12px;
         }
 
         .student-info span strong {
@@ -204,15 +144,15 @@
         .assignment-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-            gap: 30px;
+            gap: 28px;
         }
 
         .assignment-card {
             background: var(--card-bg);
             backdrop-filter: blur(15px);
             border: 3px solid #ffffff;
-            border-radius: 24px;
-            padding: 30px;
+            border-radius: 22px;
+            padding: 28px;
             box-shadow: var(--shadow-card);
             transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             display: flex;
@@ -222,7 +162,7 @@
         }
 
         .assignment-card:hover {
-            transform: translateY(-10px) rotate(1deg);
+            transform: translateY(-8px) rotate(0.8deg);
             box-shadow: var(--shadow-hover);
             border-color: #feca57;
         }
@@ -231,16 +171,16 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 800;
             letter-spacing: 0.5px;
             text-transform: uppercase;
@@ -257,20 +197,20 @@
         }
 
         .assignment-card h3 {
-            font-size: 1.45rem;
+            font-size: 1.4rem;
             font-weight: 800;
             color: #2d3436;
             margin-bottom: 10px;
         }
 
         .assignment-card p {
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             color: var(--text-muted);
             line-height: 1.6;
-            margin-bottom: 25px;
+            margin-bottom: 22px;
         }
 
-        /* Select Dropdown Styling */
+        /* Select Dropdown */
         .dropdown-wrapper label {
             display: block;
             font-size: 0.85rem;
@@ -313,34 +253,17 @@
             text-align: center;
             margin-top: 60px;
             color: #8395a7;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 600;
         }
     </style>
 </head>
 <body>
 
-    <!-- ANIMATED CATS IN BACKGROUND -->
-    <div class="bg-cat-layer">
-        <!-- 1. Mèo chạy ngang qua màn hình -->
-        <div class="running-cat">🐈</div>
+    <!-- Canvas dành riêng để render đàn mèo sống động & cần câu cá tương tác -->
+    <canvas id="catCanvas"></canvas>
 
-        <!-- 2. Mèo ngủ phát tiếng Zzz -->
-        <div class="sleeping-cat-wrapper">
-            <span class="zzz-text">Zzz...</span>
-            <div class="sleeping-cat">🐱💤</div>
-        </div>
-
-        <!-- 3. Mèo vui đùa với cuộn len -->
-        <div class="playful-cat-wrapper">
-            <div class="playful-cat">😸🧶</div>
-        </div>
-
-        <!-- 4. Mèo nhô đầu ngó lên ở đáy màn hình -->
-        <div class="peeking-cat">🐱</div>
-    </div>
-
-    <!-- MAIN CONTENT -->
+    <!-- Nội dung chính -->
     <div class="container">
         
         <!-- Header -->
@@ -354,6 +277,10 @@
                 <span>•</span>
                 <span><i class="fa-solid fa-globe" style="color: #ff9f43;"></i> <a href="http://lenghiahiep20235326.io.vn" style="color: inherit; text-decoration: none;">lenghiahiep20235326.io.vn</a></span>
             </div>
+            <br>
+            <div class="hint-bar">
+                <span>🎣 <strong>Mẹo tương tác:</strong> Nhấn giữ chuột (hoặc chạm giữ màn hình) để thả cần câu cá — đàn mèo sẽ chạy ùa tới vồ cá!</span>
+            </div>
         </header>
 
         <!-- Assignment Grid -->
@@ -364,7 +291,7 @@
                 <div>
                     <div class="card-header-top">
                         <span class="badge completed"><i class="fa-solid fa-check"></i> Complete</span>
-                        <span style="font-size: 1.5rem;">🐾</span>
+                        <span style="font-size: 1.4rem;">🐾</span>
                     </div>
                     <h3><i class="fa-solid fa-server" style="color: #54a0ff;"></i> Assignment 1</h3>
                     <p>Đăng ký tên miền miễn phí, khởi tạo GitHub Repository và thiết lập web hosting với GitHub Pages.</p>
@@ -384,7 +311,7 @@
                 <div>
                     <div class="card-header-top">
                         <span class="badge completed"><i class="fa-solid fa-check"></i> Complete</span>
-                        <span style="font-size: 1.5rem;">🐾</span>
+                        <span style="font-size: 1.4rem;">🐾</span>
                     </div>
                     <h3><i class="fa-solid fa-code" style="color: #ff6b81;"></i> Assignment 2</h3>
                     <p>Thiết kế Form đăng ký thông tin, xây dựng trang Media truyền thông và tối ưu HTML5 Semantic SEO.</p>
@@ -406,7 +333,7 @@
                 <div>
                     <div class="card-header-top">
                         <span class="badge completed"><i class="fa-solid fa-check"></i> Complete</span>
-                        <span style="font-size: 1.5rem;">🐾</span>
+                        <span style="font-size: 1.4rem;">🐾</span>
                     </div>
                     <h3><i class="fa-solid fa-paint-brush" style="color: #ff9f43;"></i> Assignment 3</h3>
                     <p>Chẩn đoán & sửa lỗi CSS Box Model/Position, dựng Responsive Media Queries 3 mốc màn hình.</p>
@@ -428,7 +355,7 @@
                 <div>
                     <div class="card-header-top">
                         <span class="badge pending"><i class="fa-solid fa-clock"></i> Upcoming</span>
-                        <span style="font-size: 1.5rem; opacity: 0.5;">🐾</span>
+                        <span style="font-size: 1.4rem; opacity: 0.5;">🐾</span>
                     </div>
                     <h3><i class="fa-solid fa-cubes" style="color: #8395a7;"></i> Assignment 4</h3>
                     <p>Nội dung bài tập tuần 4 sẽ được cập nhật sau khi nhận đề từ giảng viên.</p>
@@ -445,10 +372,353 @@
 
         <!-- Footer -->
         <footer>
-            <p>🐾 🐱 🐾 Dedicated Cat Paradise Website • © 2026 Lê Nghĩa Hiệp (20235326)</p>
+            <p>🐾 🐱 🐾 Interactive Cat Paradise • © 2026 Lê Nghĩa Hiệp (20235326)</p>
         </footer>
 
     </div>
+
+    <!-- SCRIPT ĐIỀU KHIỂN ĐÀN MÈO VÀ CẦN CÂU TƯƠNG TÁC -->
+    <script>
+        const canvas = document.getElementById('catCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Trạng thái giữ cần câu của người dùng
+        const fishingRod = {
+            active: false,
+            x: 0,
+            y: 0,
+            rodOriginX: 0,
+            rodOriginY: 0,
+            fishFloat: 0
+        };
+
+        // Lớp đối tượng Mèo với chuyển động chân, đuôi, tai mềm mại
+        class AnimatedCat {
+            constructor(color, bellyColor, size, speed, name) {
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
+                this.targetX = this.x;
+                this.targetY = this.y;
+                this.color = color;
+                this.bellyColor = bellyColor;
+                this.size = size;
+                this.baseSpeed = speed;
+                this.speed = speed;
+                this.facing = 1; // 1: phải, -1: trái
+                this.walkCycle = Math.random() * 10;
+                this.tailAngle = 0;
+                this.name = name;
+                this.idleTimer = Math.random() * 100;
+                this.isPouncing = false;
+            }
+
+            update() {
+                let dx, dy, dist;
+
+                if (fishingRod.active) {
+                    // Khi có cá: Mèo tăng tốc, hưng phấn đuổi theo mồi cá!
+                    dx = fishingRod.x - this.x;
+                    dy = fishingRod.y - this.y;
+                    dist = Math.hypot(dx, dy);
+                    this.speed = this.baseSpeed * 2.6;
+
+                    if (dist > 45) {
+                        this.x += (dx / dist) * this.speed;
+                        this.y += (dy / dist) * this.speed;
+                        this.facing = dx >= 0 ? 1 : -1;
+                        this.walkCycle += 0.28;
+                        this.isPouncing = false;
+                    } else {
+                        // Nhảy chồm lên vồ cá
+                        this.isPouncing = true;
+                        this.walkCycle += 0.15;
+                    }
+                } else {
+                    // Trạng thái tự do: Đi tuần tra, dạo chơi ngẫu nhiên
+                    this.isPouncing = false;
+                    this.idleTimer--;
+                    if (this.idleTimer <= 0) {
+                        this.targetX = 60 + Math.random() * (window.innerWidth - 120);
+                        this.targetY = 60 + Math.random() * (window.innerHeight - 120);
+                        this.idleTimer = 160 + Math.random() * 240;
+                    }
+
+                    dx = this.targetX - this.x;
+                    dy = this.targetY - this.y;
+                    dist = Math.hypot(dx, dy);
+                    this.speed = this.baseSpeed;
+
+                    if (dist > 15) {
+                        this.x += (dx / dist) * this.speed;
+                        this.y += (dy / dist) * this.speed;
+                        this.facing = dx >= 0 ? 1 : -1;
+                        this.walkCycle += 0.12;
+                    }
+                }
+
+                // Vẫy đuôi tự nhiên
+                this.tailAngle = Math.sin(this.walkCycle * 0.8) * 0.45;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.scale(this.facing * this.size, this.size);
+
+                const bobbing = Math.sin(this.walkCycle * 2) * 2.5;
+                const pounceOffset = this.isPouncing ? -8 : 0;
+
+                // 1. Đuôi mèo cong vẫy
+                ctx.save();
+                ctx.translate(-22, 2 + bobbing);
+                ctx.rotate(this.tailAngle - 0.4);
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.quadraticCurveTo(-18, -16, -26, -6);
+                ctx.lineWidth = 5;
+                ctx.strokeStyle = this.color;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+                ctx.restore();
+
+                // 2. Chân sau (bước đi so le)
+                const legSwing1 = Math.sin(this.walkCycle) * 7;
+                const legSwing2 = -legSwing1;
+
+                ctx.fillStyle = this.color;
+                // Chân sau trái & phải
+                ctx.fillRect(-16 + legSwing2, 10 + bobbing, 5, 12);
+                ctx.fillRect(-10 + legSwing1, 10 + bobbing, 5, 12);
+
+                // Chân trước trái & phải
+                ctx.fillRect(10 + legSwing1, 10 + bobbing, 5, 12);
+                ctx.fillRect(16 + legSwing2, 10 + bobbing, 5, 12);
+
+                // 3. Thân mèo
+                ctx.beginPath();
+                ctx.ellipse(0, 3 + bobbing + pounceOffset, 24, 15, 0, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+
+                // Bụng mèo
+                ctx.beginPath();
+                ctx.ellipse(2, 7 + bobbing + pounceOffset, 15, 9, 0, 0, Math.PI * 2);
+                ctx.fillStyle = this.bellyColor;
+                ctx.fill();
+
+                // 4. Đầu mèo
+                const headY = -8 + bobbing * 0.5 + pounceOffset;
+                ctx.beginPath();
+                ctx.arc(18, headY, 13, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+
+                // Hai tai mèo
+                ctx.beginPath();
+                ctx.moveTo(13, headY - 8);
+                ctx.lineTo(16, headY - 21);
+                ctx.lineTo(22, headY - 10);
+                ctx.closePath();
+                ctx.fillStyle = this.color;
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.moveTo(21, headY - 8);
+                ctx.lineTo(26, headY - 19);
+                ctx.lineTo(29, headY - 7);
+                ctx.closePath();
+                ctx.fillStyle = this.color;
+                ctx.fill();
+
+                // Tai trong màu hồng pastel
+                ctx.beginPath();
+                ctx.moveTo(15, headY - 9);
+                ctx.lineTo(17, headY - 17);
+                ctx.lineTo(21, headY - 10);
+                ctx.closePath();
+                ctx.fillStyle = '#ffb8b8';
+                ctx.fill();
+
+                // Mắt mèo (chớp mắt hoặc mở to khi săn mồi)
+                ctx.fillStyle = '#2f3542';
+                if (this.isPouncing) {
+                    ctx.font = '10px sans-serif';
+                    ctx.fillText('⭐', 18, headY + 1);
+                } else {
+                    ctx.beginPath();
+                    ctx.ellipse(22, headY - 2, 2.2, 3.2, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    // Điểm sáng trong mắt
+                    ctx.fillStyle = '#ffffff';
+                    ctx.beginPath();
+                    ctx.arc(22.8, headY - 3, 1, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Mũi và ria mép
+                ctx.fillStyle = '#ff6b81';
+                ctx.beginPath();
+                ctx.arc(27, headY + 2, 1.8, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Ria mép
+                ctx.strokeStyle = '#57606f';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(27, headY + 2); ctx.lineTo(36, headY);
+                ctx.moveTo(27, headY + 3); ctx.lineTo(36, headY + 4);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+        }
+
+        // Tạo đàn mèo với các màu sắc đa dạng: Mèo cam, tam thể, xám tro, xiêm
+        const cats = [
+            new AnimatedCat('#f39c12', '#fdebd0', 1.05, 2.2, 'Mèo Vàng Cam'),
+            new AnimatedCat('#34495e', '#ecf0f1', 0.95, 2.0, 'Mèo Xám Tro'),
+            new AnimatedCat('#e67e22', '#ffffff', 1.15, 2.5, 'Mèo Mướp'),
+            new AnimatedCat('#2c3e50', '#f5cd79', 0.85, 2.8, 'Mèo Mun Con')
+        ];
+
+        // Xử lý sự kiện nhấn giữ chuột / chạm màn hình để thả cần câu
+        function startFishing(clientX, clientY) {
+            fishingRod.active = true;
+            fishingRod.x = clientX;
+            fishingRod.y = clientY;
+            fishingRod.rodOriginX = clientX + 80;
+            fishingRod.rodOriginY = Math.max(0, clientY - 140);
+        }
+
+        function updateFishing(clientX, clientY) {
+            if (fishingRod.active) {
+                fishingRod.x = clientX;
+                fishingRod.y = clientY;
+                fishingRod.rodOriginX = clientX + 80;
+                fishingRod.rodOriginY = Math.max(0, clientY - 140);
+            }
+        }
+
+        function stopFishing() {
+            fishingRod.active = false;
+        }
+
+        window.addEventListener('mousedown', (e) => {
+            // Không kích hoạt cần câu khi đang click vào thẻ chọn select hoặc link
+            if (e.target.tagName !== 'SELECT' && e.target.tagName !== 'OPTION' && e.target.tagName !== 'A') {
+                startFishing(e.clientX, e.clientY);
+            }
+        });
+        window.addEventListener('mousemove', (e) => updateFishing(e.clientX, e.clientY));
+        window.addEventListener('mouseup', stopFishing);
+
+        // Hỗ trợ thiết bị cảm ứng điện thoại / Tablet
+        window.addEventListener('touchstart', (e) => {
+            if (e.touches.length > 0 && e.target.tagName !== 'SELECT' && e.target.tagName !== 'A') {
+                startFishing(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                updateFishing(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
+        window.addEventListener('touchend', stopFishing);
+
+        // Vòng lặp Render Animation (60 FPS)
+        function renderLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Cập nhật và vẽ đàn mèo
+            cats.forEach(cat => {
+                cat.update();
+                cat.draw();
+            });
+
+            // Vẽ Cần câu cá & Con cá lắc lư khi người dùng nhấn giữ
+            if (fishingRod.active) {
+                fishingRod.fishFloat += 0.15;
+                const fishWiggleY = Math.sin(fishingRod.fishFloat) * 8;
+                const fishWiggleRot = Math.cos(fishingRod.fishFloat) * 0.2;
+
+                // 1. Thân cần câu bằng tre/gỗ
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(fishingRod.rodOriginX + 60, fishingRod.rodOriginY - 40);
+                ctx.quadraticCurveTo(fishingRod.rodOriginX + 20, fishingRod.rodOriginY - 20, fishingRod.x + 30, fishingRod.y - 70);
+                ctx.lineWidth = 5;
+                ctx.strokeStyle = '#8d6e63';
+                ctx.lineCap = 'round';
+                ctx.stroke();
+
+                // 2. Dây cước câu cá
+                ctx.beginPath();
+                ctx.moveTo(fishingRod.x + 30, fishingRod.y - 70);
+                ctx.lineTo(fishingRod.x, fishingRod.y + fishWiggleY);
+                ctx.lineWidth = 1.5;
+                ctx.strokeStyle = 'rgba(100, 100, 100, 0.6)';
+                ctx.stroke();
+
+                // 3. Con cá vàng lúc lắc mồi ngon 🐟
+                ctx.translate(fishingRod.x, fishingRod.y + fishWiggleY);
+                ctx.rotate(fishWiggleRot);
+
+                // Thân cá
+                ctx.beginPath();
+                ctx.ellipse(0, 0, 18, 10, 0, 0, Math.PI * 2);
+                ctx.fillStyle = '#ff7675';
+                ctx.fill();
+
+                // Đuôi cá vẫy
+                ctx.beginPath();
+                ctx.moveTo(-14, 0);
+                ctx.lineTo(-26, -10);
+                ctx.lineTo(-22, 0);
+                ctx.lineTo(-26, 10);
+                ctx.closePath();
+                ctx.fillStyle = '#e17055';
+                ctx.fill();
+
+                // Mắt cá
+                ctx.beginPath();
+                ctx.arc(8, -3, 2.5, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(9, -3, 1.2, 0, Math.PI * 2);
+                ctx.fillStyle = '#000000';
+                ctx.fill();
+
+                // Vây cá
+                ctx.beginPath();
+                ctx.moveTo(0, 3);
+                ctx.lineTo(-6, 9);
+                ctx.lineTo(-2, 3);
+                ctx.fillStyle = '#fab1a0';
+                ctx.fill();
+
+                // Bong bóng nước nhỏ
+                ctx.beginPath();
+                ctx.arc(20, -8, 3, 0, Math.PI * 2);
+                ctx.arc(26, -14, 2, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            requestAnimationFrame(renderLoop);
+        }
+
+        renderLoop();
+    </script>
 
 </body>
 </html>
