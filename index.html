@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lê Nghĩa Hiệp - BTVN Công Nghệ Web (Interactive Cat World)</title>
+    <title>Lê Nghĩa Hiệp - BTVN Công Nghệ Web (Cute Cat Garden)</title>
     <!-- Google Fonts & Font Awesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,15 +12,16 @@
     
     <style>
         :root {
-            --bg-yellow: #fff9db;
+            --bg-yellow: #fffdf0;
             --primary: #ff6b81;
             --secondary: #48dbfb;
             --accent: #feca57;
             --card-bg: rgba(255, 255, 255, 0.94);
             --text-main: #2d3436;
             --text-muted: #636e72;
-            --shadow-card: 0 12px 35px rgba(254, 202, 87, 0.25);
-            --shadow-hover: 0 22px 45px rgba(255, 107, 129, 0.3);
+            --shadow-card: 0 12px 35px rgba(254, 202, 87, 0.22);
+            --shadow-hover: 0 22px 45px rgba(255, 107, 129, 0.28);
+            --grass-height: 120px;
         }
 
         * {
@@ -33,19 +34,55 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-yellow);
             background-image: 
-                radial-gradient(#f7d794 1.5px, transparent 1.5px), 
-                radial-gradient(#f7d794 1.5px, #fff9db 1.5px);
+                radial-gradient(#fae09c 1.5px, transparent 1.5px), 
+                radial-gradient(#fae09c 1.5px, #fffdf0 1.5px);
             background-size: 50px 50px;
             background-position: 0 0, 25px 25px;
             color: var(--text-main);
             min-height: 100vh;
-            padding: 40px 20px 80px;
+            padding: 40px 20px calc(var(--grass-height) + 40px);
             position: relative;
             overflow-x: hidden;
             user-select: none;
         }
 
-        /* Canvas cho hiệu ứng mèo tương tác */
+        /* Thảm cỏ xanh mát dưới đáy màn hình */
+        .grass-ground {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: var(--grass-height);
+            background: linear-gradient(180deg, #78e08f 0%, #38ada9 100%);
+            border-top: 6px solid #b8e994;
+            box-shadow: 0 -8px 25px rgba(56, 173, 169, 0.25);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* Chi tiết ngọn cỏ mềm mại */
+        .grass-blades {
+            position: absolute;
+            top: -15px;
+            left: 0;
+            width: 100%;
+            height: 16px;
+            background-image: radial-gradient(circle at 10px 16px, transparent 10px, #b8e994 11px);
+            background-size: 20px 20px;
+        }
+
+        /* Những bông hoa nhỏ trên cỏ */
+        .flower {
+            position: absolute;
+            font-size: 1.1rem;
+            animation: flowerWiggle 3s infinite ease-in-out;
+        }
+        @keyframes flowerWiggle {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(12deg); }
+        }
+
+        /* Canvas vẽ đàn mèo & cần câu cá */
         #catCanvas {
             position: fixed;
             top: 0;
@@ -60,7 +97,7 @@
         .hint-bar {
             background: linear-gradient(135deg, #ffeaa7, #fab1a0);
             color: #d35400;
-            padding: 8px 18px;
+            padding: 9px 20px;
             border-radius: 20px;
             font-size: 0.88rem;
             font-weight: 700;
@@ -69,12 +106,12 @@
             gap: 8px;
             box-shadow: 0 4px 15px rgba(250, 177, 160, 0.35);
             margin-top: 10px;
-            animation: pulseHint 2s infinite ease-in-out;
+            animation: pulseHint 2.5s infinite ease-in-out;
         }
 
         @keyframes pulseHint {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.04); }
+            50% { transform: scale(1.03); }
         }
 
         /* Container nội dung */
@@ -88,12 +125,12 @@
         /* Header */
         header {
             text-align: center;
-            margin-bottom: 45px;
+            margin-bottom: 40px;
         }
 
         .header-avatar {
-            width: 100px;
-            height: 100px;
+            width: 95px;
+            height: 95px;
             background: #ffeaa7;
             border: 4px solid #fff;
             border-radius: 50%;
@@ -101,18 +138,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3.5rem;
-            box-shadow: 0 10px 30px rgba(254, 202, 87, 0.5);
+            font-size: 3.2rem;
+            box-shadow: 0 10px 25px rgba(254, 202, 87, 0.45);
             animation: bounceAvatar 3s infinite ease-in-out;
         }
 
         @keyframes bounceAvatar {
-            0%, 100% { transform: translateY(0) rotate(0); }
-            50% { transform: translateY(-10px) rotate(4deg); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         header h1 {
-            font-size: 2.6rem;
+            font-size: 2.5rem;
             font-weight: 800;
             color: #d35400;
             text-shadow: 2px 2px 0 #fff;
@@ -162,7 +199,7 @@
         }
 
         .assignment-card:hover {
-            transform: translateY(-8px) rotate(0.8deg);
+            transform: translateY(-8px) rotate(0.6deg);
             box-shadow: var(--shadow-hover);
             border-color: #feca57;
         }
@@ -251,7 +288,7 @@
         /* Footer */
         footer {
             text-align: center;
-            margin-top: 60px;
+            margin-top: 50px;
             color: #8395a7;
             font-size: 0.92rem;
             font-weight: 600;
@@ -260,7 +297,17 @@
 </head>
 <body>
 
-    <!-- Canvas dành riêng để render đàn mèo sống động & cần câu cá tương tác -->
+    <!-- Thảm cỏ xanh dưới đáy màn hình -->
+    <div class="grass-ground">
+        <div class="grass-blades"></div>
+        <span class="flower" style="left: 8%; top: 25px;">🌸</span>
+        <span class="flower" style="left: 22%; top: 40px; animation-delay: 1s;">🌼</span>
+        <span class="flower" style="left: 48%; top: 20px; animation-delay: 1.5s;">🌷</span>
+        <span class="flower" style="left: 75%; top: 35px; animation-delay: 0.5s;">🌼</span>
+        <span class="flower" style="left: 90%; top: 22px; animation-delay: 2s;">🌸</span>
+    </div>
+
+    <!-- Canvas dành riêng để render đàn mèo & cần câu cá tương tác -->
     <canvas id="catCanvas"></canvas>
 
     <!-- Nội dung chính -->
@@ -279,7 +326,7 @@
             </div>
             <br>
             <div class="hint-bar">
-                <span>🎣 <strong>Mẹo tương tác:</strong> Nhấn giữ chuột (hoặc chạm giữ màn hình) để thả cần câu cá — đàn mèo sẽ chạy ùa tới vồ cá!</span>
+                <span>🎣 <strong>Mẹo câu mèo:</strong> Nhấn giữ để thả cá xuống gần thảm cỏ. Để vừa tầm mèo sẽ nhảy đớp trúng cá, nếu để quá cao mèo chỉ nhảy với hụt!</span>
             </div>
         </header>
 
@@ -372,12 +419,12 @@
 
         <!-- Footer -->
         <footer>
-            <p>🐾 🐱 🐾 Interactive Cat Paradise • © 2026 Lê Nghĩa Hiệp (20235326)</p>
+            <p>🐾 🐱 🐾 Peaceful Cat Garden • © 2026 Lê Nghĩa Hiệp (20235326)</p>
         </footer>
 
     </div>
 
-    <!-- SCRIPT ĐIỀU KHIỂN ĐÀN MÈO VÀ CẦN CÂU TƯƠNG TÁC -->
+    <!-- SCRIPT ĐIỀU KHIỂN ĐÀN MÈO VÀ CƠ CHẾ NHẢY BẮT CÁ TRÊN THẢM CỎ -->
     <script>
         const canvas = document.getElementById('catCanvas');
         const ctx = canvas.getContext('2d');
@@ -389,82 +436,111 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Trạng thái giữ cần câu của người dùng
+        const GRASS_TOP = () => window.innerHeight - 100; // Mặt phẳng thảm cỏ mèo bước đi
+
+        // Trạng thái cần câu cá
         const fishingRod = {
             active: false,
             x: 0,
             y: 0,
-            rodOriginX: 0,
-            rodOriginY: 0,
-            fishFloat: 0
+            fishFloat: 0,
+            eatenTimer: 0 // Khi bị mèo đớp trúng
         };
 
-        // Lớp đối tượng Mèo với chuyển động chân, đuôi, tai mềm mại
-        class AnimatedCat {
-            constructor(color, bellyColor, size, speed, name) {
-                this.x = Math.random() * window.innerWidth;
-                this.y = Math.random() * window.innerHeight;
-                this.targetX = this.x;
-                this.targetY = this.y;
+        // Lớp đối tượng Mèo Cute Anime tròn trịa, mắt to long lanh
+        class CuteGardenCat {
+            constructor(color, bellyColor, earColor, size, baseSpeed, name) {
+                this.x = Math.random() * (window.innerWidth - 100) + 50;
+                this.groundY = GRASS_TOP();
+                this.y = this.groundY;
+                this.vy = 0; // Vận tốc nhảy
+                this.isJumping = false;
+                
                 this.color = color;
                 this.bellyColor = bellyColor;
+                this.earColor = earColor;
                 this.size = size;
-                this.baseSpeed = speed;
-                this.speed = speed;
-                this.facing = 1; // 1: phải, -1: trái
+                
+                // Tốc độ bình thường & tốc độ đuổi cá (giảm 40% so với trước: 1.1 thay vì 2.6)
+                this.patrolSpeed = baseSpeed;
+                this.chaseSpeed = baseSpeed * 1.05; 
+                this.speed = baseSpeed;
+
+                this.facing = Math.random() > 0.5 ? 1 : -1;
+                this.targetX = this.x;
                 this.walkCycle = Math.random() * 10;
                 this.tailAngle = 0;
-                this.name = name;
                 this.idleTimer = Math.random() * 100;
-                this.isPouncing = false;
+                this.successCatch = false;
+                this.name = name;
             }
 
             update() {
-                let dx, dy, dist;
+                this.groundY = GRASS_TOP();
 
-                if (fishingRod.active) {
-                    // Khi có cá: Mèo tăng tốc, hưng phấn đuổi theo mồi cá!
-                    dx = fishingRod.x - this.x;
-                    dy = fishingRod.y - this.y;
-                    dist = Math.hypot(dx, dy);
-                    this.speed = this.baseSpeed * 2.6;
+                // 1. Logic trọng lực và nhảy (Physics Jump)
+                if (this.isJumping) {
+                    this.y += this.vy;
+                    this.vy += 0.55; // Gia tốc trọng trường kéo mèo rơi lại cỏ
 
-                    if (dist > 45) {
-                        this.x += (dx / dist) * this.speed;
-                        this.y += (dy / dist) * this.speed;
-                        this.facing = dx >= 0 ? 1 : -1;
-                        this.walkCycle += 0.28;
-                        this.isPouncing = false;
-                    } else {
-                        // Nhảy chồm lên vồ cá
-                        this.isPouncing = true;
-                        this.walkCycle += 0.15;
-                    }
-                } else {
-                    // Trạng thái tự do: Đi tuần tra, dạo chơi ngẫu nhiên
-                    this.isPouncing = false;
-                    this.idleTimer--;
-                    if (this.idleTimer <= 0) {
-                        this.targetX = 60 + Math.random() * (window.innerWidth - 120);
-                        this.targetY = 60 + Math.random() * (window.innerHeight - 120);
-                        this.idleTimer = 160 + Math.random() * 240;
-                    }
-
-                    dx = this.targetX - this.x;
-                    dy = this.targetY - this.y;
-                    dist = Math.hypot(dx, dy);
-                    this.speed = this.baseSpeed;
-
-                    if (dist > 15) {
-                        this.x += (dx / dist) * this.speed;
-                        this.y += (dy / dist) * this.speed;
-                        this.facing = dx >= 0 ? 1 : -1;
-                        this.walkCycle += 0.12;
+                    if (this.y >= this.groundY) {
+                        this.y = this.groundY;
+                        this.isJumping = false;
+                        this.vy = 0;
                     }
                 }
 
-                // Vẫy đuôi tự nhiên
-                this.tailAngle = Math.sin(this.walkCycle * 0.8) * 0.45;
+                // 2. Tương tác với Cần câu cá
+                if (fishingRod.active) {
+                    const dx = fishingRod.x - this.x;
+                    const distHorizontal = Math.abs(dx);
+                    const fishHeightAboveGround = this.groundY - fishingRod.y;
+
+                    // Di chuyển đuổi theo cá với tốc độ chậm vừa phải (40% so với trước)
+                    if (distHorizontal > 25) {
+                        this.x += (dx > 0 ? 1 : -1) * this.chaseSpeed;
+                        this.facing = dx > 0 ? 1 : -1;
+                        this.walkCycle += 0.15;
+                    }
+
+                    // Khi mèo chạy đến sát dưới con cá
+                    if (distHorizontal <= 55 && !this.isJumping) {
+                        // KHOẢNG HỢP LÝ: Nếu cá cách mặt cỏ từ 30px đến 160px -> Mèo nhảy lên vừa tầm
+                        if (fishHeightAboveGround >= 30 && fishHeightAboveGround <= 165) {
+                            this.isJumping = true;
+                            this.vy = -Math.min(13, Math.sqrt(2 * 0.55 * fishHeightAboveGround) + 2); // Nhảy đúng tầm cá
+                            this.successCatch = true;
+                            fishingRod.eatenTimer = 35; // Hiệu ứng ăn trúng cá
+                        } 
+                        // NẾU CÁ ĐỂ QUÁ CAO (> 165px): Mèo ráng nhảy nhưng bị hụt
+                        else if (fishHeightAboveGround > 165) {
+                            this.isJumping = true;
+                            this.vy = -10; // Nhảy tối đa nhưng không với tới cá
+                            this.successCatch = false;
+                        }
+                    }
+                } else {
+                    // Dạo chơi ngẫu nhiên trên thảm cỏ
+                    this.successCatch = false;
+                    this.idleTimer--;
+                    if (this.idleTimer <= 0) {
+                        this.targetX = 60 + Math.random() * (window.innerWidth - 120);
+                        this.idleTimer = 180 + Math.random() * 260;
+                    }
+
+                    const dx = this.targetX - this.x;
+                    if (Math.abs(dx) > 10) {
+                        this.x += (dx > 0 ? 1 : -1) * this.patrolSpeed;
+                        this.facing = dx > 0 ? 1 : -1;
+                        this.walkCycle += 0.08;
+                    }
+                }
+
+                // Giới hạn biên màn hình không cho mèo chạy ra ngoài
+                this.x = Math.max(40, Math.min(window.innerWidth - 40, this.x));
+
+                // Đuôi lắc lư
+                this.tailAngle = Math.sin(this.walkCycle * 0.8) * 0.4;
             }
 
             draw() {
@@ -472,120 +548,169 @@
                 ctx.translate(this.x, this.y);
                 ctx.scale(this.facing * this.size, this.size);
 
-                const bobbing = Math.sin(this.walkCycle * 2) * 2.5;
-                const pounceOffset = this.isPouncing ? -8 : 0;
+                const bobbing = this.isJumping ? -3 : Math.sin(this.walkCycle * 2) * 2;
 
-                // 1. Đuôi mèo cong vẫy
+                // 1. Đuôi mèo cong vút bồng bềnh
                 ctx.save();
-                ctx.translate(-22, 2 + bobbing);
-                ctx.rotate(this.tailAngle - 0.4);
+                ctx.translate(-22, -8 + bobbing);
+                ctx.rotate(this.tailAngle - 0.3);
                 ctx.beginPath();
                 ctx.moveTo(0, 0);
-                ctx.quadraticCurveTo(-18, -16, -26, -6);
-                ctx.lineWidth = 5;
+                ctx.quadraticCurveTo(-18, -20, -12, -32);
+                ctx.lineWidth = 7;
                 ctx.strokeStyle = this.color;
                 ctx.lineCap = 'round';
                 ctx.stroke();
+                // Đầu chóp đuôi
+                ctx.beginPath();
+                ctx.arc(-12, -32, 4, 0, Math.PI * 2);
+                ctx.fillStyle = this.bellyColor;
+                ctx.fill();
                 ctx.restore();
 
-                // 2. Chân sau (bước đi so le)
-                const legSwing1 = Math.sin(this.walkCycle) * 7;
-                const legSwing2 = -legSwing1;
-
+                // 2. Chân tròn trịa (Chân trước & chân sau)
+                const legSwing = this.isJumping ? 4 : Math.sin(this.walkCycle) * 6;
                 ctx.fillStyle = this.color;
-                // Chân sau trái & phải
-                ctx.fillRect(-16 + legSwing2, 10 + bobbing, 5, 12);
-                ctx.fillRect(-10 + legSwing1, 10 + bobbing, 5, 12);
-
-                // Chân trước trái & phải
-                ctx.fillRect(10 + legSwing1, 10 + bobbing, 5, 12);
-                ctx.fillRect(16 + legSwing2, 10 + bobbing, 5, 12);
-
-                // 3. Thân mèo
+                // Chân sau
                 ctx.beginPath();
-                ctx.ellipse(0, 3 + bobbing + pounceOffset, 24, 15, 0, 0, Math.PI * 2);
+                ctx.roundRect(-16 - legSwing, -4, 8, 12, 4);
+                ctx.roundRect(-8 + legSwing, -4, 8, 12, 4);
+                // Chân trước
+                ctx.roundRect(8 + legSwing, -4, 8, 12, 4);
+                ctx.roundRect(16 - legSwing, -4, 8, 12, 4);
+                ctx.fill();
+
+                // 3. Thân mèo hình tròn mập ú đáng yêu
+                ctx.beginPath();
+                ctx.ellipse(0, -12 + bobbing, 24, 18, 0, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
                 ctx.fill();
 
-                // Bụng mèo
+                // Bụng tròn sáng màu
                 ctx.beginPath();
-                ctx.ellipse(2, 7 + bobbing + pounceOffset, 15, 9, 0, 0, Math.PI * 2);
+                ctx.ellipse(2, -8 + bobbing, 15, 12, 0, 0, Math.PI * 2);
                 ctx.fillStyle = this.bellyColor;
                 ctx.fill();
 
-                // 4. Đầu mèo
-                const headY = -8 + bobbing * 0.5 + pounceOffset;
+                // 4. Đầu mèo to tròn (Chibi Style)
+                const headY = -26 + bobbing * 0.7;
                 ctx.beginPath();
-                ctx.arc(18, headY, 13, 0, Math.PI * 2);
+                ctx.arc(15, headY, 17, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
                 ctx.fill();
 
-                // Hai tai mèo
+                // Hai tai mèo tròn nhọn xinh xắn
+                // Tai trái
                 ctx.beginPath();
-                ctx.moveTo(13, headY - 8);
-                ctx.lineTo(16, headY - 21);
-                ctx.lineTo(22, headY - 10);
+                ctx.moveTo(7, headY - 11);
+                ctx.lineTo(10, headY - 26);
+                ctx.lineTo(19, headY - 14);
                 ctx.closePath();
                 ctx.fillStyle = this.color;
                 ctx.fill();
-
+                // Tai trong trái
                 ctx.beginPath();
-                ctx.moveTo(21, headY - 8);
-                ctx.lineTo(26, headY - 19);
-                ctx.lineTo(29, headY - 7);
+                ctx.moveTo(9, headY - 12);
+                ctx.lineTo(11, headY - 22);
+                ctx.lineTo(17, headY - 14);
+                ctx.closePath();
+                ctx.fillStyle = this.earColor;
+                ctx.fill();
+
+                // Tai phải
+                ctx.beginPath();
+                ctx.moveTo(18, headY - 12);
+                ctx.lineTo(24, headY - 25);
+                ctx.lineTo(29, headY - 10);
                 ctx.closePath();
                 ctx.fillStyle = this.color;
                 ctx.fill();
-
-                // Tai trong màu hồng pastel
+                // Tai trong phải
                 ctx.beginPath();
-                ctx.moveTo(15, headY - 9);
-                ctx.lineTo(17, headY - 17);
-                ctx.lineTo(21, headY - 10);
+                ctx.moveTo(20, headY - 13);
+                ctx.lineTo(24, headY - 22);
+                ctx.lineTo(27, headY - 11);
                 ctx.closePath();
-                ctx.fillStyle = '#ffb8b8';
+                ctx.fillStyle = this.earColor;
                 ctx.fill();
 
-                // Mắt mèo (chớp mắt hoặc mở to khi săn mồi)
-                ctx.fillStyle = '#2f3542';
-                if (this.isPouncing) {
-                    ctx.font = '10px sans-serif';
-                    ctx.fillText('⭐', 18, headY + 1);
-                } else {
+                // Má hồng dễ thương
+                ctx.beginPath();
+                ctx.arc(13, headY + 5, 4, 0, Math.PI * 2);
+                ctx.arc(26, headY + 5, 4, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 121, 121, 0.45)';
+                ctx.fill();
+
+                // Đôi mắt to đen láy long lanh
+                if (this.successCatch && this.isJumping) {
+                    // Mắt híp cười sung sướng khi đớp trúng cá (^_^)
+                    ctx.strokeStyle = '#2f3542';
+                    ctx.lineWidth = 2.5;
                     ctx.beginPath();
-                    ctx.ellipse(22, headY - 2, 2.2, 3.2, 0, 0, Math.PI * 2);
+                    ctx.arc(16, headY - 1, 4, Math.PI, 0);
+                    ctx.arc(25, headY - 1, 4, Math.PI, 0);
+                    ctx.stroke();
+                } else {
+                    // Mắt to tròn long lanh
+                    ctx.fillStyle = '#2f3542';
+                    ctx.beginPath();
+                    ctx.arc(16, headY - 1, 3.8, 0, Math.PI * 2);
+                    ctx.arc(25, headY - 1, 3.8, 0, Math.PI * 2);
                     ctx.fill();
-                    // Điểm sáng trong mắt
+
+                    // Ánh sáng trong mắt (Sparkle)
                     ctx.fillStyle = '#ffffff';
                     ctx.beginPath();
-                    ctx.arc(22.8, headY - 3, 1, 0, Math.PI * 2);
+                    ctx.arc(15, headY - 2.5, 1.5, 0, Math.PI * 2);
+                    ctx.arc(17.2, headY, 0.8, 0, Math.PI * 2);
+                    ctx.arc(24, headY - 2.5, 1.5, 0, Math.PI * 2);
+                    ctx.arc(26.2, headY, 0.8, 0, Math.PI * 2);
                     ctx.fill();
                 }
 
-                // Mũi và ria mép
+                // Mũi tam giác hồng nhỏ & miệng cười :3
                 ctx.fillStyle = '#ff6b81';
                 ctx.beginPath();
-                ctx.arc(27, headY + 2, 1.8, 0, Math.PI * 2);
+                ctx.moveTo(20, headY + 2);
+                ctx.lineTo(22, headY + 2);
+                ctx.lineTo(21, headY + 4);
+                ctx.closePath();
                 ctx.fill();
 
-                // Ria mép
-                ctx.strokeStyle = '#57606f';
+                // Miệng :3
+                ctx.strokeStyle = '#2f3542';
+                ctx.lineWidth = 1.2;
+                ctx.beginPath();
+                ctx.arc(19.5, headY + 5, 2, 0, Math.PI);
+                ctx.arc(22.5, headY + 5, 2, 0, Math.PI);
+                ctx.stroke();
+
+                // Ria mép mỏng xinh
+                ctx.strokeStyle = '#747d8c';
                 ctx.lineWidth = 1;
                 ctx.beginPath();
-                ctx.moveTo(27, headY + 2); ctx.lineTo(36, headY);
-                ctx.moveTo(27, headY + 3); ctx.lineTo(36, headY + 4);
+                ctx.moveTo(25, headY + 3); ctx.lineTo(34, headY + 2);
+                ctx.moveTo(25, headY + 5); ctx.lineTo(33, headY + 7);
                 ctx.stroke();
+
+                // Biểu cảm khi nhảy hụt (Mồ hôi rơi nhẹ)
+                if (this.isJumping && !this.successCatch) {
+                    ctx.fillStyle = '#74b9ff';
+                    ctx.beginPath();
+                    ctx.arc(28, headY - 14, 2.5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
 
                 ctx.restore();
             }
         }
 
-        // Tạo đàn mèo với các màu sắc đa dạng: Mèo cam, tam thể, xám tro, xiêm
+        // Tạo 4 chú mèo phong cách Cute Chibi cực đẹp
         const cats = [
-            new AnimatedCat('#f39c12', '#fdebd0', 1.05, 2.2, 'Mèo Vàng Cam'),
-            new AnimatedCat('#34495e', '#ecf0f1', 0.95, 2.0, 'Mèo Xám Tro'),
-            new AnimatedCat('#e67e22', '#ffffff', 1.15, 2.5, 'Mèo Mướp'),
-            new AnimatedCat('#2c3e50', '#f5cd79', 0.85, 2.8, 'Mèo Mun Con')
+            new CuteGardenCat('#f9ca24', '#fff9e6', '#ffbe76', 1.05, 1.1, 'Mèo Vàng Béo'),
+            new CuteGardenCat('#718093', '#f5f6fa', '#dcdde1', 0.98, 1.0, 'Mèo Xám Anh'),
+            new CuteGardenCat('#e17055', '#ffeaa7', '#fab1a0', 1.12, 1.2, 'Mèo Mướp Cam'),
+            new CuteGardenCat('#2f3640', '#dcdde1', '#747d8c', 0.92, 1.3, 'Mèo Mun Chibi')
         ];
 
         // Xử lý sự kiện nhấn giữ chuột / chạm màn hình để thả cần câu
@@ -593,16 +718,12 @@
             fishingRod.active = true;
             fishingRod.x = clientX;
             fishingRod.y = clientY;
-            fishingRod.rodOriginX = clientX + 80;
-            fishingRod.rodOriginY = Math.max(0, clientY - 140);
         }
 
         function updateFishing(clientX, clientY) {
             if (fishingRod.active) {
                 fishingRod.x = clientX;
                 fishingRod.y = clientY;
-                fishingRod.rodOriginX = clientX + 80;
-                fishingRod.rodOriginY = Math.max(0, clientY - 140);
             }
         }
 
@@ -611,7 +732,6 @@
         }
 
         window.addEventListener('mousedown', (e) => {
-            // Không kích hoạt cần câu khi đang click vào thẻ chọn select hoặc link
             if (e.target.tagName !== 'SELECT' && e.target.tagName !== 'OPTION' && e.target.tagName !== 'A') {
                 startFishing(e.clientX, e.clientY);
             }
@@ -619,7 +739,7 @@
         window.addEventListener('mousemove', (e) => updateFishing(e.clientX, e.clientY));
         window.addEventListener('mouseup', stopFishing);
 
-        // Hỗ trợ thiết bị cảm ứng điện thoại / Tablet
+        // Hỗ trợ cảm ứng điện thoại
         window.addEventListener('touchstart', (e) => {
             if (e.touches.length > 0 && e.target.tagName !== 'SELECT' && e.target.tagName !== 'A') {
                 startFishing(e.touches[0].clientX, e.touches[0].clientY);
@@ -636,80 +756,86 @@
         function renderLoop() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Cập nhật và vẽ đàn mèo
+            // Cập nhật và vẽ đàn mèo di chuyển trên mặt cỏ
             cats.forEach(cat => {
                 cat.update();
                 cat.draw();
             });
 
-            // Vẽ Cần câu cá & Con cá lắc lư khi người dùng nhấn giữ
+            // Vẽ Cần câu cá và chú cá vàng
             if (fishingRod.active) {
-                fishingRod.fishFloat += 0.15;
-                const fishWiggleY = Math.sin(fishingRod.fishFloat) * 8;
-                const fishWiggleRot = Math.cos(fishingRod.fishFloat) * 0.2;
+                fishingRod.fishFloat += 0.12;
+                const fishWiggleY = Math.sin(fishingRod.fishFloat) * 6;
+                const rodTopX = fishingRod.x + 60;
+                const rodTopY = Math.max(10, fishingRod.y - 120);
 
-                // 1. Thân cần câu bằng tre/gỗ
+                // Giảm hiệu ứng đớp cá
+                if (fishingRod.eatenTimer > 0) {
+                    fishingRod.eatenTimer--;
+                }
+
+                // 1. Thân cần câu bằng tre
                 ctx.save();
                 ctx.beginPath();
-                ctx.moveTo(fishingRod.rodOriginX + 60, fishingRod.rodOriginY - 40);
-                ctx.quadraticCurveTo(fishingRod.rodOriginX + 20, fishingRod.rodOriginY - 20, fishingRod.x + 30, fishingRod.y - 70);
+                ctx.moveTo(rodTopX + 50, rodTopY - 50);
+                ctx.quadraticCurveTo(rodTopX + 15, rodTopY - 25, fishingRod.x + 20, rodTopY);
                 ctx.lineWidth = 5;
-                ctx.strokeStyle = '#8d6e63';
+                ctx.strokeStyle = '#b7791f';
                 ctx.lineCap = 'round';
                 ctx.stroke();
 
                 // 2. Dây cước câu cá
                 ctx.beginPath();
-                ctx.moveTo(fishingRod.x + 30, fishingRod.y - 70);
+                ctx.moveTo(fishingRod.x + 20, rodTopY);
                 ctx.lineTo(fishingRod.x, fishingRod.y + fishWiggleY);
                 ctx.lineWidth = 1.5;
-                ctx.strokeStyle = 'rgba(100, 100, 100, 0.6)';
+                ctx.strokeStyle = 'rgba(120, 120, 120, 0.6)';
                 ctx.stroke();
 
-                // 3. Con cá vàng lúc lắc mồi ngon 🐟
+                // 3. Con cá vàng mồi câu
                 ctx.translate(fishingRod.x, fishingRod.y + fishWiggleY);
-                ctx.rotate(fishWiggleRot);
 
-                // Thân cá
-                ctx.beginPath();
-                ctx.ellipse(0, 0, 18, 10, 0, 0, Math.PI * 2);
-                ctx.fillStyle = '#ff7675';
-                ctx.fill();
+                if (fishingRod.eatenTimer > 0) {
+                    // Khi mèo đớp trúng cá -> Hiện tim và sao vui sướng
+                    ctx.font = '24px sans-serif';
+                    ctx.fillText('✨❤️✨', -25, -10);
+                } else {
+                    // Con cá bơi lắc lư
+                    ctx.rotate(Math.sin(fishingRod.fishFloat) * 0.15);
 
-                // Đuôi cá vẫy
-                ctx.beginPath();
-                ctx.moveTo(-14, 0);
-                ctx.lineTo(-26, -10);
-                ctx.lineTo(-22, 0);
-                ctx.lineTo(-26, 10);
-                ctx.closePath();
-                ctx.fillStyle = '#e17055';
-                ctx.fill();
+                    // Thân cá
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, 17, 10, 0, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ff7675';
+                    ctx.fill();
 
-                // Mắt cá
-                ctx.beginPath();
-                ctx.arc(8, -3, 2.5, 0, Math.PI * 2);
-                ctx.fillStyle = '#ffffff';
-                ctx.fill();
-                ctx.beginPath();
-                ctx.arc(9, -3, 1.2, 0, Math.PI * 2);
-                ctx.fillStyle = '#000000';
-                ctx.fill();
+                    // Đuôi cá
+                    ctx.beginPath();
+                    ctx.moveTo(-13, 0);
+                    ctx.lineTo(-24, -9);
+                    ctx.lineTo(-20, 0);
+                    ctx.lineTo(-24, 9);
+                    ctx.closePath();
+                    ctx.fillStyle = '#e17055';
+                    ctx.fill();
 
-                // Vây cá
-                ctx.beginPath();
-                ctx.moveTo(0, 3);
-                ctx.lineTo(-6, 9);
-                ctx.lineTo(-2, 3);
-                ctx.fillStyle = '#fab1a0';
-                ctx.fill();
+                    // Mắt cá
+                    ctx.beginPath();
+                    ctx.arc(8, -2, 2.6, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(9, -2, 1.2, 0, Math.PI * 2);
+                    ctx.fillStyle = '#000000';
+                    ctx.fill();
 
-                // Bong bóng nước nhỏ
-                ctx.beginPath();
-                ctx.arc(20, -8, 3, 0, Math.PI * 2);
-                ctx.arc(26, -14, 2, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-                ctx.fill();
+                    // Bong bóng nước
+                    ctx.beginPath();
+                    ctx.arc(18, -6, 2.5, 0, Math.PI * 2);
+                    ctx.arc(24, -12, 1.8, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+                    ctx.fill();
+                }
 
                 ctx.restore();
             }
