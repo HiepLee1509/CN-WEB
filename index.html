@@ -398,19 +398,21 @@
             </div>
 
             <!-- Assignment 4 -->
-            <div class="assignment-card disabled">
+            <div class="assignment-card">
                 <div>
                     <div class="card-header-top">
-                        <span class="badge pending"><i class="fa-solid fa-clock"></i> Upcoming</span>
-                        <span style="font-size: 1.4rem; opacity: 0.5;">🐾</span>
+                        <span class="badge completed"><i class="fa-solid fa-check"></i> Complete</span>
+                        <span style="font-size: 1.4rem;">🐾</span>
                     </div>
-                    <h3><i class="fa-solid fa-cubes" style="color: #8395a7;"></i> Assignment 4</h3>
-                    <p>Nội dung bài tập tuần 4 sẽ được cập nhật sau khi nhận đề từ giảng viên.</p>
+                    <h3><i class="fa-brands fa-js" style="color: #f1c40f;"></i> Assignment 4</h3>
+                    <p>Lập trình JavaScript: Xử lý dữ liệu JSON &amp; Giỏ hàng xưởng in, Thư viện ảnh tương tác &amp; Đăng tin nhanh.</p>
                 </div>
                 <div class="dropdown-wrapper">
                     <label><i class="fa-solid fa-cat"></i> Chọn đường dẫn kết quả:</label>
-                    <select class="custom-select" disabled>
-                        <option value="">-- Chưa mở --</option>
+                    <select class="custom-select" onchange="if(this.value) window.location.href=this.value;">
+                        <option value="">-- Click chọn bài làm --</option>
+                        <option value="assignment4/Bai tap 2 - JS tin tuc va gio hang/index.html">🐾 Link to bài 2</option>
+                        <option value="assignment4/Bai tap 3 - JS thu vien anh va tin nhanh/index.html">🐾 Link to bài 3</option>
                     </select>
                 </div>
             </div>
