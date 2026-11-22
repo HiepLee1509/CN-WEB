@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment 6 - Quản lý người dùng (React CRUD)</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- React, ReactDOM, Babel qua CDN (theo Bước 1 PDF) -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // ==========================================
+        // BƯỚC 3: COMPONENT SEARCHFORM
+        // ==========================================
+        function SearchForm({ onChangeValue }) {
+            return (
+                <div className="search-box">
+                    <i className="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input
+                        type="text"
+                        className="search-input"
+                        placeholder="Tìm theo name, username..."
+                        onChange={(e) => onChangeValue(e.target.value)}
+                    />
+                </div>
+            );
+        }
+
+        // ==========================================
+        // BƯỚC 5: COMPONENT ADDUSER
+        // ==========================================
+        function AddUser({ onAdd }) {
+            const [adding, setAdding] = React.useState(false);
+            const [user, setUser] = React.useState({
+                name: "",
+                username: "",
+                email: "",
+                address: { street: "", suite: "", city: "" },
+                phone: "",
+                website: ""
+            });
+
+            const handleChange = (e) => {
+                const { id, value } = e.target;
+                if (["street", "suite", "city"].includes(id)) {
+                    setUser({
+                        ...user,
+                        address: { ...user.address, [id]: value }
+                    });
+                } else {
+                    setUser({ ...user, [id]: value });
+                }
+            };
+
+            const handleAdd = (e) => {
+                if (e) e.preventDefault();
+                if (user.name.trim() === "" || user.username.trim() === "") {
+                    alert("Vui lòng nhập Name và Username!");
+                    return;
+                }
+                onAdd(user);
+                // Reset form
+                setUser({
+                    name: "",
+                    username: "",
+                    email: "",
+                    address: { street: "", suite: "", city: "" },
+                    phone: "",
+                    website: ""
+                });
+                setAdding(false);
+            };
+
+            return (
+                <div>
+                    <button className="btn btn-primary" onClick={() => setAdding(true)}>
+                        <i className="fa-solid fa-user-plus"></i> Thêm người dùng
+                    </button>
+
+                    {adding && (
+                        <div className="modal-overlay" onClick={() => setAdding(false)}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h4><i className="fa-solid fa-user-plus"></i> Thêm người dùng mới</h4>
+                                    <button className="btn-close" onClick={() => setAdding(false)}>✕</button>
+                                </div>
+                                <form onSubmit={handleAdd}>
+                                    <div className="form-group">
+                                        <label htmlFor="name">Họ và tên (*):</label>
+                                        <input
+                                            id="name"
+                                            type="text"
+                                            required
+                                            placeholder="VD: Le Nghia Hiep"
+                                            value={user.name}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="username">Username (*):</label>
+                                        <input
+                                            id="username"
+                                            type="text"
+                                            required
+                                            placeholder="VD: hieplee"
+                                            value={user.username}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="email">Email:</label>
+                                        <input
+                                            id="email"
+                                            type="email"
+                                            placeholder="email@example.com"
+                                            value={user.email}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="form-row">
+                                        <div className="form-group">
+                                            <label htmlFor="street">Đường (Street):</label>
+                                            <input
+                                                id="street"
+                                                type="text"
+                                                placeholder="VD: Dai Co Viet"
+                                                value={user.address.street}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="suite">Số nhà (Suite):</label>
+                                            <input
+                                                id="suite"
+                                                type="text"
+                                                placeholder="VD: Apt. 1"
+                                                value={user.address.suite}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="city">Thành phố (City):</label>
+                                        <input
+                                            id="city"
+                                            type="text"
+                                            placeholder="VD: Ha Noi"
+                                            value={user.address.city}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="form-row">
+                                        <div className="form-group">
+                                            <label htmlFor="phone">Số điện thoại:</label>
+                                            <input
+                                                id="phone"
+                                                type="text"
+                                                placeholder="VD: 0901234567"
+                                                value={user.phone}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="website">Website:</label>
+                                            <input
+                                                id="website"
+                                                type="text"
+                                                placeholder="VD: lenghiahiep.vn"
+                                                value={user.website}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="modal-actions">
+                                        <button type="submit" className="btn btn-success">
+                                            <i className="fa-solid fa-check"></i> Thêm
+                                        </button>
+                                        <button type="button" className="btn btn-secondary" onClick={() => setAdding(false)}>
+                                            Hủy
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // ==========================================
+        // BƯỚC 4, 6, 7: COMPONENT RESULTTABLE
+        // ==========================================
+        function ResultTable({ keyword, user, onAdded }) {
+            const [users, setUsers] = React.useState([]);
+            const [loading, setLoading] = React.useState(true);
+            const [editing, setEditing] = React.useState(null);
+
+            // Tải dữ liệu 1 lần khi component mount (Bước 4)
+            React.useEffect(() => {
+                fetch("https://jsonplaceholder.typicode.com/users")
+                    .then((res) => res.json())
+                    .then((data) => {
+                        setUsers(data);
+                        setLoading(false);
+                    })
+                    .catch((err) => {
+                        console.warn("Không kết nối được API, sử dụng dữ liệu mẫu dự phòng:", err);
+                        setUsers([
+                            { id: 1, name: "Leanne Graham", username: "Bret", email: "Sincere@april.biz", address: { street: "Kulas Light", suite: "Apt. 556", city: "Gwenborough" }, phone: "1-770-736-8031 x56442" },
+                            { id: 2, name: "Ervin Howell", username: "Antonette", email: "Shanna@melissa.tv", address: { street: "Victor Plains", suite: "Suite 879", city: "Wisokyburgh" }, phone: "010-692-6593 x09125" },
+                            { id: 3, name: "Clementine Bauch", username: "Samantha", email: "Nathan@yesenia.net", address: { street: "Douglas Extension", suite: "Suite 847", city: "McKenziehaven" }, phone: "1-463-123-4447" },
+                            { id: 4, name: "Patricia Lebsack", username: "Karianne", email: "Julianne.OConner@kory.org", address: { street: "Hoeger Mall", suite: "Apt. 692", city: "South Elvis" }, phone: "493-170-9623 x156" },
+                            { id: 5, name: "Chelsey Dietrich", username: "Kamren", email: "Lucio_Hettinger@annie.ca", address: { street: "Skiles Walks", suite: "Suite 351", city: "Roscoeview" }, phone: "(254)954-1289" },
+                            { id: 6, name: "Mrs. Dennis Schulist", username: "Leopoldo_Corkery", email: "Karley_Dach@jasper.info", address: { street: "Norberto Crossing", suite: "Apt. 950", city: "South Christy" }, phone: "1-477-935-8478 x6430" },
+                            { id: 7, name: "Kurtis Weissnat", username: "Elwyn.Skiles", email: "Telly.Hoeger@billy.biz", address: { street: "Rex Trail", suite: "Suite 280", city: "Howemouth" }, phone: "210.067.6132" },
+                            { id: 8, name: "Nicholas Runolfsdottir V", username: "Maxime_Nienow", email: "Sherwood@rosamond.me", address: { street: "Ellsworth Summit", suite: "Suite 729", city: "Aliyaview" }, phone: "586.493.6943 x140" },
+                            { id: 9, name: "Glenna Reichert", username: "Delphine", email: "Chaim_McDermott@dana.io", address: { street: "Dayna Park", suite: "Suite 449", city: "Bartholomebury" }, phone: "(775)976-6794 x41206" },
+                            { id: 10, name: "Clementina DuBuque", username: "Moriah.Stanton", email: "Rey.Padberg@karina.biz", address: { street: "Kattie Turnpike", suite: "Suite 198", city: "Lebsackbury" }, phone: "024-648-3804" }
+                        ]);
+                        setLoading(false);
+                    });
+            }, []);
+
+            // Lắng nghe khi prop user thay đổi -> thêm vào danh sách (Bước 5)
+            React.useEffect(() => {
+                if (user) {
+                    setUsers((prev) => [
+                        ...prev,
+                        {
+                            ...user,
+                            id: prev.length > 0 ? Math.max(...prev.map((u) => Number(u.id) || 0)) + 1 : 1
+                        }
+                    ]);
+                    onAdded();
+                }
+            }, [user]);
+
+            // Lọc danh sách theo keyword (Bước 4)
+            const filteredUsers = users.filter(
+                (u) =>
+                    (u.name && u.name.toLowerCase().includes(keyword.toLowerCase())) ||
+                    (u.username && u.username.toLowerCase().includes(keyword.toLowerCase()))
+            );
+
+            // BƯỚC 6: Sửa người dùng
+            function editUser(userItem) {
+                // Deep Copy tránh đột biến dữ liệu gốc do tham chiếu
+                setEditing({
+                    ...userItem,
+                    address: { ...(userItem.address || { street: "", suite: "", city: "" }) }
+                });
+            }
+
+            const handleEditChange = (field, value) => {
+                if (["street", "suite", "city"].includes(field)) {
+                    setEditing({
+                        ...editing,
+                        address: { ...(editing.address || {}), [field]: value }
+                    });
+                } else {
+                    setEditing({ ...editing, [field]: value });
+                }
+            };
+
+            function saveUser(e) {
+                if (e) e.preventDefault();
+                if (!editing.name.trim() || !editing.username.trim()) {
+                    alert("Name và Username không được để trống!");
+                    return;
+                }
+                setUsers((prev) => prev.map((u) => (u.id === editing.id ? editing : u)));
+                setEditing(null);
+            }
+
+            // BƯỚC 7: Xóa người dùng
+            function removeUser(id) {
+                if (window.confirm("Bạn có chắc chắn muốn xóa người dùng này?")) {
+                    setUsers((prev) => prev.filter((u) => u.id !== id));
+                }
+            }
+
+            if (loading) {
+                return (
+                    <div className="loading-state">
+                        <i className="fa-solid fa-spinner fa-spin"></i> Đang tải danh sách người dùng từ API...
+                    </div>
+                );
+            }
+
+            return (
+                <div className="table-wrapper">
+                    <div className="table-stats">
+                        <span><i className="fa-solid fa-users"></i> Đang hiển thị: <strong>{filteredUsers.length}</strong> / {users.length} người dùng</span>
+                        {keyword && <span className="tag-filter">Từ khóa: "{keyword}"</span>}
+                    </div>
+
+                    <div className="table-responsive">
+                        <table className="user-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Họ tên</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredUsers.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="7" className="empty-row">
+                                            <i className="fa-solid fa-user-slash"></i> Không tìm thấy người dùng nào phù hợp.
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    filteredUsers.map((u) => (
+                                        <tr key={u.id}>
+                                            <td className="cell-id">#{u.id}</td>
+                                            <td className="cell-name">{u.name}</td>
+                                            <td className="cell-username">@{u.username}</td>
+                                            <td>{u.email}</td>
+                                            <td className="cell-address">
+                                                {u.address ? `${u.address.street || ""}, ${u.address.suite || ""}, ${u.address.city || ""}` : ""}
+                                            </td>
+                                            <td>{u.phone}</td>
+                                            <td className="cell-actions">
+                                                <button className="btn btn-sm btn-edit" onClick={() => editUser(u)}>
+                                                    <i className="fa-solid fa-pen-to-square"></i> Sửa
+                                                </button>
+                                                <button className="btn btn-sm btn-delete" onClick={() => removeUser(u.id)}>
+                                                    <i className="fa-solid fa-trash"></i> Xóa
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* MODAL SỬA NGƯỜI DÙNG */}
+                    {editing && (
+                        <div className="modal-overlay" onClick={() => setEditing(null)}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h4><i className="fa-solid fa-user-pen"></i> Sửa thông tin người dùng #{editing.id}</h4>
+                                    <button className="btn-close" onClick={() => setEditing(null)}>✕</button>
+                                </div>
+                                <form onSubmit={saveUser}>
+                                    <div className="form-group">
+                                        <label htmlFor="edit-name">Họ và tên (*):</label>
+                                        <input
+                                            id="edit-name"
+                                            type="text"
+                                            required
+                                            value={editing.name}
+                                            onChange={(e) => handleEditChange("name", e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="edit-username">Username (*):</label>
+                                        <input
+                                            id="edit-username"
+                                            type="text"
+                                            required
+                                            value={editing.username}
+                                            onChange={(e) => handleEditChange("username", e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="edit-email">Email:</label>
+                                        <input
+                                            id="edit-email"
+                                            type="email"
+                                            value={editing.email}
+                                            onChange={(e) => handleEditChange("email", e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="form-row">
+                                        <div className="form-group">
+                                            <label htmlFor="edit-street">Đường (Street):</label>
+                                            <input
+                                                id="edit-street"
+                                                type="text"
+                                                value={editing.address?.street || ""}
+                                                onChange={(e) => handleEditChange("street", e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="edit-suite">Số nhà (Suite):</label>
+                                            <input
+                                                id="edit-suite"
+                                                type="text"
+                                                value={editing.address?.suite || ""}
+                                                onChange={(e) => handleEditChange("suite", e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="edit-city">Thành phố (City):</label>
+                                        <input
+                                            id="edit-city"
+                                            type="text"
+                                            value={editing.address?.city || ""}
+                                            onChange={(e) => handleEditChange("city", e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="edit-phone">Số điện thoại:</label>
+                                        <input
+                                            id="edit-phone"
+                                            type="text"
+                                            value={editing.phone}
+                                            onChange={(e) => handleEditChange("phone", e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="modal-actions">
+                                        <button type="submit" className="btn btn-success">
+                                            <i className="fa-solid fa-floppy-disk"></i> Lưu thay đổi
+                                        </button>
+                                        <button type="button" className="btn btn-secondary" onClick={() => setEditing(null)}>
+                                            Hủy
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // ==========================================
+        // BƯỚC 2: COMPONENT GỐC APP
+        // ==========================================
+        function App() {
+            const [kw, setKeyword] = React.useState("");
+            const [newUser, setNewUser] = React.useState(null);
+
+            return (
+                <div className="app-container">
+                    <header className="app-header">
+                        <div className="header-top">
+                            <a href="../index.html" className="btn-back">
+                                <i className="fa-solid fa-arrow-left"></i> Về Trang Chủ
+                            </a>
+                            <span className="badge-tech"><i className="fa-brands fa-react"></i> React 18 CRUD</span>
+                        </div>
+                        <h1><i className="fa-solid fa-users-gear" style={{ color: "#3498db" }}></i> Quản lý người dùng</h1>
+                        <p className="subtitle">Ứng dụng Single Page Application (SPA) quản lý danh sách với đầy đủ chức năng Thêm, Tìm kiếm, Sửa, Xóa.</p>
+                    </header>
+
+                    <div className="app-toolbar">
+                        <SearchForm onChangeValue={setKeyword} />
+                        <AddUser onAdd={setNewUser} />
+                    </div>
+
+                    <ResultTable
+                        keyword={kw}
+                        user={newUser}
+                        onAdded={() => setNewUser(null)}
+                    />
+
+                    <footer className="app-footer">
+                        <p>© 2026 Lê Nghĩa Hiệp (20235326) • Assignment 6 - Lập trình React cơ bản</p>
+                    </footer>
+                </div>
+            );
+        }
+
+        // Render ứng dụng vào DOM qua React 18 createRoot
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<App />);
+    </script>
+</body>
+</html>
